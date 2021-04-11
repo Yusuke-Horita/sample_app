@@ -24,6 +24,7 @@ class Rakuten
 		exclusion_companys_1 = []
 		exclusion_companys_2 = []
 		exclusion_companys_3 = []
+		exclusion_companys_4 = []
 
 		# begin
 			100.times do |page|
@@ -78,6 +79,14 @@ class Rakuten
 							hash[:url] = driver.current_url
 							exclusion_companys_3 << hash
 							ap hash[:title]
+						elsif /出向/ =~ text
+							hash = {}
+							hash[:category] = driver.find_element(:css, ".project-tag.large.normal").text
+							hash[:company] = driver.find_element(:css, ".company-link").text
+							hash[:title] = driver.find_element(:css, ".project-title").text
+							hash[:url] = driver.current_url
+							exclusion_companys_4 << hash
+							ap hash[:title]
 						else
 							hash = {}
 							hash[:category] = driver.find_element(:css, ".project-tag.large.normal").text
@@ -89,7 +98,7 @@ class Rakuten
 						end
 					rescue
 						text = driver.find_element(:css, ".js-descriptions").text
-						if /プロジェクト先|クライアント先/ =~ text || /フロントエンド|フロントエンジニア|CTO|デザイナー/ =~ driver.find_element(:css, ".job-type-tag").text
+						if /プロジェクト先|クライアント先/ =~ text
 							hash = {}
 							hash[:category] = driver.find_element(:css, ".job-type-tag").text
 							hash[:company] = driver.find_element(:css, ".company-name").text
@@ -97,7 +106,7 @@ class Rakuten
 							hash[:url] = driver.current_url
 							exclusion_companys_1 << hash
 							ap hash[:title]
-						elsif /常駐|客先/ =~ text || /フロントエンド|フロントエンジニア|CTO|デザイナー/ =~ driver.find_element(:css, ".job-type-tag").text
+						elsif /常駐|客先/ =~ text
 							hash = {}
 							hash[:category] = driver.find_element(:css, ".job-type-tag").text
 							hash[:company] = driver.find_element(:css, ".company-name").text
@@ -105,13 +114,21 @@ class Rakuten
 							hash[:url] = driver.current_url
 							exclusion_companys_2 << hash
 							ap hash[:title]
-						elsif /SES/ =~ text || /フロントエンド|フロントエンジニア|CTO|デザイナー/ =~ driver.find_element(:css, ".job-type-tag").text
+						elsif /SES/ =~ text
 							hash = {}
 							hash[:category] = driver.find_element(:css, ".job-type-tag").text
 							hash[:company] = driver.find_element(:css, ".company-name").text
 							hash[:title] = driver.find_element(:css, ".project-title").text
 							hash[:url] = driver.current_url
 							exclusion_companys_3 << hash
+							ap hash[:title]
+						elsif /出向/ =~ text
+							hash = {}
+							hash[:category] = driver.find_element(:css, ".job-type-tag").text
+							hash[:company] = driver.find_element(:css, ".company-name").text
+							hash[:title] = driver.find_element(:css, ".project-title").text
+							hash[:url] = driver.current_url
+							exclusion_companys_4 << hash
 							ap hash[:title]
 						else
 							hash = {}
@@ -150,29 +167,17 @@ class Rakuten
 			# 	end
 			# end
 
-			puts inclusion_companys.size
-			puts exclusion_companys_1.size
-			puts exclusion_companys_2.size
-			puts exclusion_companys_3.size
-
-			puts exclusion_companys_1
-
 			inclusion_companys.uniq!
 			exclusion_companys_1.uniq!
 			exclusion_companys_2.uniq!
 			exclusion_companys_3.uniq!
-
-			ap inclusion_companys.size
-			ap exclusion_companys_1.size
-			ap exclusion_companys_2.size
-			ap exclusion_companys_3.size
-
-			puts exclusion_companys_1
+			exclusion_companys_4.uniq!
 
 			f_i = []
 			f_e_1 = []
 			f_e_2 = []
 			f_e_3 = []
+			f_e_4 = []
 	
 			inclusion_companys.each do |company|
 				if index = f_i.rindex(f_i.select{|i| i[:company] == company[:company]}.last)
@@ -206,13 +211,14 @@ class Rakuten
 					f_e_3 << company
 				end
 			end
-
-			puts f_i.size
-			puts f_e_1.size
-			puts f_e_2.size
-			puts f_e_3.size
-
-			puts f_e_1
+			exclusion_companys_4.each do |company|
+				if index = f_e_4.rindex(f_e_4.select{|i| i[:company] == company[:company]}.last)
+					company[:company] = "└ " + company[:company]
+					f_e_4.insert(index + 1, company)
+				else
+					f_e_4 << company
+				end
+			end
 	
 			CSV.open('inclusion_company.csv', 'w') do |csv|
 				csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
@@ -235,6 +241,12 @@ class Rakuten
 			CSV.open('exclusion_company_3.csv', 'w') do |csv|
 				csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
 				f_e_3.each_with_index do |company, i|
+					csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
+				end
+			end
+			CSV.open('exclusion_company_4.csv', 'w') do |csv|
+				csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
+				f_e_4.each_with_index do |company, i|
 					csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
 				end
 			end
