@@ -17,7 +17,7 @@ class Rakuten
 		driver.find_element(:css, "#password").send_keys PASSWORD
 		driver.find_element(:css, "#password").submit
 		wait.until { driver.find_element(:css, ".OptionalSelectorAbstract--leader").displayed? }
-		driver.get "https://www.wantedly.com/projects?type=mixed&page=1&occupation_types%5B%5D=jp__engineering&hiring_types%5B%5D=mid_career&fields%5B%5D=jp__mobile_engineer&fields%5B%5D=jp__web_engineer&fields%5B%5D=jp__systems_engineer&fields%5B%5D=jp__data_scientist&locations%5B%5D=tokyo"
+		driver.get "https://www.wantedly.com/projects?type=mixed&page=1&occupation_types%5B%5D=jp__engineering&hiring_types%5B%5D=mid_career&fields%5B%5D=jp__systems_engineer&fields%5B%5D=jp__web_engineer&locations%5B%5D=tokyo&keywords%5B%5D=rails"
 		# ------ driver.find_element(:css, "#comment____________").submit --------
 
 		inclusion_companys = []
@@ -30,7 +30,7 @@ class Rakuten
 			100.times do |page|
 				10.times do |num|
 					begin
-						driver.find_elements(:css, ".project-index-single-inner")[num]
+						driver.find_elements(:css, ".project-index-single-inner")[num].displayed?
 					rescue
 						next
 					end
@@ -142,8 +142,12 @@ class Rakuten
 					end
 					driver.navigate.back
 				end
-				driver.find_element(:link_text, "次へ").click
 				puts "--- #{ page + 1 } ---"
+				begin
+					driver.find_element(:link_text, "次へ").click
+				rescue
+					break
+				end
 				5.times do
 					begin
 						wait.until { driver.find_element(:css, ".project-index-single-inner").displayed? }
@@ -171,13 +175,11 @@ class Rakuten
 			exclusion_companys_1.uniq!
 			exclusion_companys_2.uniq!
 			exclusion_companys_3.uniq!
-			exclusion_companys_4.uniq!
 
 			f_i = []
 			f_e_1 = []
 			f_e_2 = []
 			f_e_3 = []
-			f_e_4 = []
 	
 			inclusion_companys.each do |company|
 				if index = f_i.rindex(f_i.select{|i| i[:company] == company[:company]}.last)
@@ -211,14 +213,6 @@ class Rakuten
 					f_e_3 << company
 				end
 			end
-			exclusion_companys_4.each do |company|
-				if index = f_e_4.rindex(f_e_4.select{|i| i[:company] == company[:company]}.last)
-					company[:company] = "└ " + company[:company]
-					f_e_4.insert(index + 1, company)
-				else
-					f_e_4 << company
-				end
-			end
 	
 			CSV.open('inclusion_company.csv', 'w') do |csv|
 				csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
@@ -241,12 +235,6 @@ class Rakuten
 			CSV.open('exclusion_company_3.csv', 'w') do |csv|
 				csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
 				f_e_3.each_with_index do |company, i|
-					csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
-				end
-			end
-			CSV.open('exclusion_company_4.csv', 'w') do |csv|
-				csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
-				f_e_4.each_with_index do |company, i|
 					csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
 				end
 			end
