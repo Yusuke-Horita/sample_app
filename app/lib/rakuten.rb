@@ -24,7 +24,6 @@ class Rakuten
 		exclusion_companys_1 = []
 		exclusion_companys_2 = []
 		exclusion_companys_3 = []
-		exclusion_companys_4 = []
 
 		# begin
 			100.times do |page|
@@ -79,14 +78,6 @@ class Rakuten
 							hash[:url] = driver.current_url
 							exclusion_companys_3 << hash
 							ap hash[:title]
-						elsif /出向/ =~ text
-							hash = {}
-							hash[:category] = driver.find_element(:css, ".project-tag.large.normal").text
-							hash[:company] = driver.find_element(:css, ".company-link").text
-							hash[:title] = driver.find_element(:css, ".project-title").text
-							hash[:url] = driver.current_url
-							exclusion_companys_4 << hash
-							ap hash[:title]
 						else
 							hash = {}
 							hash[:category] = driver.find_element(:css, ".project-tag.large.normal").text
@@ -122,14 +113,6 @@ class Rakuten
 							hash[:url] = driver.current_url
 							exclusion_companys_3 << hash
 							ap hash[:title]
-						elsif /出向/ =~ text
-							hash = {}
-							hash[:category] = driver.find_element(:css, ".job-type-tag").text
-							hash[:company] = driver.find_element(:css, ".company-name").text
-							hash[:title] = driver.find_element(:css, ".project-title").text
-							hash[:url] = driver.current_url
-							exclusion_companys_4 << hash
-							ap hash[:title]
 						else
 							hash = {}
 							hash[:category] = driver.find_element(:css, ".job-type-tag").text
@@ -145,15 +128,18 @@ class Rakuten
 				puts "--- #{ page + 1 } ---"
 				begin
 					driver.find_element(:link_text, "次へ").click
+					ap "次へ"
 				rescue
 					break
 				end
 				5.times do
 					begin
 						wait.until { driver.find_element(:css, ".project-index-single-inner").displayed? }
+						ap"表示"
 						break
 					rescue
 						driver.navigate.refresh
+						ap "リロード"
 					end
 				end
 			end
