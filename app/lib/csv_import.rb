@@ -89,6 +89,67 @@ class CsvImport
 		puts exclusion_company_2.size
 		puts exclusion_company_3.size
 
-		
+		f_i = []
+		f_e_1 = []
+		f_e_2 = []
+		f_e_3 = []
+
+		inclusion_companys.each do |company|
+			if index = f_i.rindex(f_i.select{|i| i[:company] == company[:company]}.last)
+				company[:company] = "└ " + company[:company]
+				f_i.insert(index + 1, company)
+			else
+				f_i << company
+			end
+		end
+		exclusion_companys_1.each do |company|
+			if index = f_e_1.rindex(f_e_1.select{|i| i[:company] == company[:company]}.last)
+				company[:company] = "└ " + company[:company]
+				f_e_1.insert(index + 1, company)
+			else
+				f_e_1 << company
+			end
+		end
+		exclusion_companys_2.each do |company|
+			if index = f_e_2.rindex(f_e_2.select{|i| i[:company] == company[:company]}.last)
+				company[:company] = "└ " + company[:company]
+				f_e_2.insert(index + 1, company)
+			else
+				f_e_2 << company
+			end
+		end
+		exclusion_companys_3.each do |company|
+			if index = f_e_3.rindex(f_e_3.select{|i| i[:company] == company[:company]}.last)
+				company[:company] = "└ " + company[:company]
+				f_e_3.insert(index + 1, company)
+			else
+				f_e_3 << company
+			end
+		end
+
+		CSV.open('inclusion_company.csv', 'w') do |csv|
+			csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
+			f_i.each_with_index do |company, i|
+				csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
+			end
+		end
+		CSV.open('exclusion_company_1.csv', 'w') do |csv|
+			csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
+			f_e_1.each_with_index do |company, i|
+				csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
+			end
+		end
+		CSV.open('exclusion_company_2.csv', 'w') do |csv|
+			csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
+			f_e_2.each_with_index do |company, i|
+				csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
+			end
+		end
+		CSV.open('exclusion_company_3.csv', 'w') do |csv|
+			csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
+			f_e_3.each_with_index do |company, i|
+				csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
+			end
+		end
 	end
 end
