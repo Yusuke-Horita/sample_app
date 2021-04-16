@@ -1,93 +1,93 @@
 class CsvImport
 	require 'csv'
 	def self.import
-		inclusion_company = []
-		exclusion_company_1 = []
-		exclusion_company_2 = []
-		exclusion_company_3 = []
+		inclusion_companys = []
+		exclusion_companys_1 = []
+		exclusion_companys_2 = []
+		exclusion_companys_3 = []
 
 		CSV.foreach("応募企業_Ruby.csv") do |row|
 			hash = {}
-			hash["category"] = row[0]
-			hash["company_name"] = row[1]
-			hash["title"] = row[2]
-			hash["url"] = row[3]
-			inclusion_company << hash
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			inclusion_companys << hash
 		end
-		ap inclusion_company.size
+		ap inclusion_companys.size
 		CSV.foreach("応募企業_Rails.csv") do |row|
 			hash = {}
-			hash["category"] = row[0]
-			hash["company_name"] = row[1]
-			hash["title"] = row[2]
-			hash["url"] = row[3]
-			inclusion_company << hash
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			inclusion_companys << hash
 		end
-		ap inclusion_company.size
+		ap inclusion_companys.size
 		CSV.foreach("除外企業_Ruby（フロント・プロジェクト先・クライアント先）.csv") do |row|
 			hash = {}
-			hash["category"] = row[0]
-			hash["company_name"] = row[1]
-			hash["title"] = row[2]
-			hash["url"] = row[3]
-			exclusion_company_1 << hash
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_1 << hash
 		end
-		ap exclusion_company_1.size
+		ap exclusion_companys_1.size
 		CSV.foreach("除外企業_Rails（フロント・プロジェクト先・クライアント先）.csv") do |row|
 			hash = {}
-			hash["category"] = row[0]
-			hash["company_name"] = row[1]
-			hash["title"] = row[2]
-			hash["url"] = row[3]
-			exclusion_company_1 << hash
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_1 << hash
 		end
-		ap exclusion_company_1.size
+		ap exclusion_companys_1.size
 		CSV.foreach("除外企業_Ruby（常駐・客先）.csv") do |row|
 			hash = {}
-			hash["category"] = row[0]
-			hash["company_name"] = row[1]
-			hash["title"] = row[2]
-			hash["url"] = row[3]
-			exclusion_company_2 << hash
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_2 << hash
 		end
-		ap exclusion_company_2.size
+		ap exclusion_companys_2.size
 		CSV.foreach("除外企業_Rails（常駐・客先）.csv") do |row|
 			hash = {}
-			hash["category"] = row[0]
-			hash["company_name"] = row[1]
-			hash["title"] = row[2]
-			hash["url"] = row[3]
-			exclusion_company_2 << hash
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_2 << hash
 		end
-		ap exclusion_company_2.size
+		ap exclusion_companys_2.size
 		CSV.foreach("除外企業_Ruby（SES）.csv") do |row|
 			hash = {}
-			hash["category"] = row[0]
-			hash["company_name"] = row[1]
-			hash["title"] = row[2]
-			hash["url"] = row[3]
-			exclusion_company_3 << hash
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_3 << hash
 		end
-		ap exclusion_company_3.size
+		ap exclusion_companys_3.size
 		CSV.foreach("除外企業_Rails（SES）.csv") do |row|
 			hash = {}
-			hash["category"] = row[0]
-			hash["company_name"] = row[1]
-			hash["title"] = row[2]
-			hash["url"] = row[3]
-			exclusion_company_3 << hash
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_3 << hash
 		end
-		ap exclusion_company_3.size
+		ap exclusion_companys_3.size
 
-		inclusion_company.uniq!
-		exclusion_company_1.uniq!
-		exclusion_company_2.uniq!
-		exclusion_company_3.uniq!
+		inclusion_companys.uniq!
+		exclusion_companys_1.uniq!
+		exclusion_companys_2.uniq!
+		exclusion_companys_3.uniq!
 
-		puts inclusion_company.size
-		puts exclusion_company_1.size
-		puts exclusion_company_2.size
-		puts exclusion_company_3.size
+		puts inclusion_companys.size
+		puts exclusion_companys_1.size
+		puts exclusion_companys_2.size
+		puts exclusion_companys_3.size
 
 		f_i = []
 		f_e_1 = []
@@ -127,29 +127,151 @@ class CsvImport
 			end
 		end
 
-		CSV.open('inclusion_company.csv', 'w') do |csv|
+		ap f_i.size
+		ap f_e_1.size
+		ap f_e_2.size
+		ap f_e_3.size
+		
+		CSV.open('応募企業_RubyOnRails.csv', 'w') do |csv|
 			csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
 			f_i.each_with_index do |company, i|
 				csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
 			end
 		end
-		CSV.open('exclusion_company_1.csv', 'w') do |csv|
+		CSV.open('除外企業_RubyOnRails（フロント・プロジェクト先・クライアント先）.csv', 'w') do |csv|
 			csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
 			f_e_1.each_with_index do |company, i|
 				csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
 			end
 		end
-		CSV.open('exclusion_company_2.csv', 'w') do |csv|
+		CSV.open('除外企業_RubyOnRails（常駐・客先）.csv', 'w') do |csv|
 			csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
 			f_e_2.each_with_index do |company, i|
 				csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
 			end
 		end
-		CSV.open('exclusion_company_3.csv', 'w') do |csv|
+		CSV.open('除外企業_RubyOnRails（SES）.csv', 'w') do |csv|
 			csv << ["", "ジャンル", "タイトル", "会社名", "URL"]
 			f_e_3.each_with_index do |company, i|
 				csv << [i + 1, company[:category], company[:company], company[:title], company[:url]]
 			end
 		end
+	end
+
+	def self.company_match
+		inclusion_companys = []
+		exclusion_companys_1 = []
+		exclusion_companys_2 = []
+		exclusion_companys_3 = []
+		
+		inclusion_companys_2 = []
+		exclusion_companys_1_2 = []
+		exclusion_companys_2_2 = []
+		exclusion_companys_3_2 = []
+
+		CSV.foreach("応募企業_RubyOnRails.csv") do |row|
+			hash = {}
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			inclusion_companys << hash
+		end
+		CSV.foreach("除外企業_RubyOnRails（フロント・プロジェクト先・クライアント先）.csv") do |row|
+			hash = {}
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_1 << hash
+		end
+		CSV.foreach("除外企業_RubyOnRails（常駐・客先）.csv") do |row|
+			hash = {}
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_2 << hash
+		end
+		CSV.foreach("除外企業_RubyOnRails（SES）.csv") do |row|
+			hash = {}
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_3 << hash
+		end
+
+		CSV.foreach("応募企業.csv") do |row|
+			hash = {}
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			inclusion_companys_2 << hash
+		end
+		CSV.foreach("除外企業（フロント・プロジェクト先・クライアント先）.csv") do |row|
+			hash = {}
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_1_2 << hash
+		end
+		CSV.foreach("除外企業（常駐・客先）.csv") do |row|
+			hash = {}
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_2_2 << hash
+		end
+		CSV.foreach("除外企業（SES）.csv") do |row|
+			hash = {}
+			hash[:category] = row[0]
+			hash[:company] = row[1]
+			hash[:title] = row[2]
+			hash[:url] = row[3]
+			exclusion_companys_3_2 << hash
+		end
+
+		ap inclusion_companys.size
+		ap exclusion_companys_1.size
+		ap exclusion_companys_2.size
+		ap exclusion_companys_3.size
+
+		match_1 = []
+		match_2 = []
+		match_3 = []
+		match_4 = []
+
+		inclusion_companys.each do |company|
+			if inclusion_companys_2.select{|i| i[:company] == company[:company]}
+				match_1 << company[:company]
+			end
+		end
+		puts "----- 応募企業 -----"
+		exclusion_companys_1.each do |company|
+			if exclusion_companys_1_2.select{|i| i[:company] == company[:company]}
+				match_2 << company[:company]
+			end
+		end
+		puts "----- 除外企業-１ -----）"
+		exclusion_companys_2.each do |company|
+			if exclusion_companys_2_2.select{|i| i[:company] == company[:company]}
+				match_3 << company[:company]
+			end
+		end
+		puts "----- 除外企業-２ -----"
+		exclusion_companys_3.each do |company|
+			if exclusion_companys_3_2.select{|i| i[:company] == company[:company]}
+				match_4 << company[:company]
+			end
+		end
+		puts "----- 除外企業-３ -----"
+		puts match_1.size
+		puts match_2.size
+		puts match_3.size
+		puts match_4.size
 	end
 end
