@@ -244,31 +244,40 @@ class CsvImport
 		match_2 = []
 		match_3 = []
 		match_4 = []
-
+		
 		inclusion_companys.each do |company|
-			if inclusion_companys_2.select{|i| i[:company] == company[:company]}
+			unless inclusion_companys_2.find{|i| i[:company] == company[:company]}
 				match_1 << company[:company]
+				# ap "[#{company[:company]}] #{company[:title]}"
+				ap company[:company]
 			end
 		end
 		puts "----- 応募企業 -----"
 		exclusion_companys_1.each do |company|
-			if exclusion_companys_1_2.select{|i| i[:company] == company[:company]}
+			unless exclusion_companys_1_2.find{|i| i[:company] == company[:company]}
 				match_2 << company[:company]
+				# ap "[#{company[:company]}] #{company[:title]}"
+				ap company[:company]
 			end
 		end
 		puts "----- 除外企業-１ -----）"
 		exclusion_companys_2.each do |company|
-			if exclusion_companys_2_2.select{|i| i[:company] == company[:company]}
+			unless exclusion_companys_2_2.find{|i| i[:company] == company[:company]}
 				match_3 << company[:company]
+				# ap "[#{company[:company]}] #{company[:title]}"
+				ap company[:company]
 			end
 		end
 		puts "----- 除外企業-２ -----"
 		exclusion_companys_3.each do |company|
-			if exclusion_companys_3_2.select{|i| i[:company] == company[:company]}
+			unless exclusion_companys_3_2.find{|i| i[:company] == company[:company]}
 				match_4 << company[:company]
+				# ap "[#{company[:company]}] #{company[:title]}"
+				ap company[:company]
 			end
 		end
 		puts "----- 除外企業-３ -----"
+
 		puts match_1.size
 		puts match_2.size
 		puts match_3.size
