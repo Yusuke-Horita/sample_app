@@ -17,7 +17,7 @@ class Rakuten
 		driver.find_element(:css, "#password").send_keys PASSWORD
 		driver.find_element(:css, "#password").submit
 		wait.until { driver.find_element(:css, ".OptionalSelectorAbstract--leader").displayed? }
-		driver.get "https://www.wantedly.com/projects?type=mixed&page=1&occupation_types%5B%5D=jp__engineering&hiring_types%5B%5D=mid_career&fields%5B%5D=jp__systems_engineer&fields%5B%5D=jp__web_engineer&locations%5B%5D=tokyo&keywords%5B%5D=rails"
+		driver.get "https://www.wantedly.com/projects?type=mixed&page=1&occupation_types%5B%5D=jp__engineering&hiring_types%5B%5D=mid_career&fields%5B%5D=jp__web_engineer&fields%5B%5D=jp__systems_engineer&locations%5B%5D=tokyo&keywords%5B%5D=java"
 		# ------ driver.find_element(:css, "#comment____________").submit --------
 
 		inclusion_companys = []
